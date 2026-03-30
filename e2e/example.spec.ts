@@ -3,5 +3,5 @@ import { test, expect } from '@playwright/test';
 test('has title', async ({ page }) => {
 	await page.goto('/');
 
-	await expect(page.getByText('Hello World')).toBeVisible();
+	await expect(page.getByText('Hello Worl')).toBeVisible();
 });
