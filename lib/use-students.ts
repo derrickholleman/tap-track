@@ -17,6 +17,11 @@ export function useStudents() {
 		return student;
 	}
 
+	function reorderStudents(fromIndex: number, toIndex: number) {
+		storage.reorderStudents(fromIndex, toIndex);
+		refresh();
+	}
+
 	function deleteStudent(studentId: string) {
 		storage.deleteStudent(studentId);
 		refresh();
@@ -49,6 +54,7 @@ export function useStudents() {
 	return {
 		students,
 		addStudent,
+		reorderStudents,
 		deleteStudent,
 		getStudent,
 		addBehavior,

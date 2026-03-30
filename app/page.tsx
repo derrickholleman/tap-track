@@ -7,7 +7,7 @@ import { FilterBar } from '@/components/filter-bar';
 import { StudentList } from '@/components/student-list';
 
 export default function Home() {
-	const { students } = useStudents();
+	const { students, reorderStudents } = useStudents();
 	const [filterQuery, setFilterQuery] = useState('');
 
 	const filtered = students.filter((s) =>
@@ -27,7 +27,7 @@ export default function Home() {
 			</div>
 
 			<FilterBar value={filterQuery} onChange={setFilterQuery} />
-			<StudentList students={filtered} />
+			<StudentList students={filtered} onReorder={reorderStudents} />
 		</main>
 	);
 }

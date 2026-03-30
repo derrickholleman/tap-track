@@ -35,6 +35,13 @@ export function addStudent(firstName: string, lastName: string): Student {
 	return student;
 }
 
+export function reorderStudents(fromIndex: number, toIndex: number): void {
+	const students = getStudents();
+	const [moved] = students.splice(fromIndex, 1);
+	students.splice(toIndex, 0, moved);
+	setStudents(students);
+}
+
 export function deleteStudent(studentId: string): void {
 	const students = getStudents().filter((s) => s.id !== studentId);
 	setStudents(students);
