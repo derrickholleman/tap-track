@@ -27,10 +27,6 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 		);
 	}
 
-	function handleDeleteBehavior(behaviorId: string) {
-		deleteBehavior(studentId, behaviorId);
-	}
-
 	function handleDeleteStudent() {
 		deleteStudent(studentId);
 		showToast('Student deleted successfully');
@@ -49,7 +45,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 				</div>
 				<button
 					onClick={() => setShowDeleteModal(true)}
-					className="absolute right-0 cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+					className="absolute right-0 rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
 				>
 					Delete Student
 				</button>
@@ -68,7 +64,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 				<BehaviorList
 					behaviors={student.behaviors}
 					studentId={studentId}
-					onDelete={handleDeleteBehavior}
+					onDelete={(id) => deleteBehavior(studentId, id)}
 				/>
 			</section>
 

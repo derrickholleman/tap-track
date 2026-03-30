@@ -3,24 +3,10 @@
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStudents } from '@/lib/use-students';
+import { timestampToDateString, timestampToTimeString } from '@/lib/format-date';
 import { PageHeader } from '@/components/page-header';
 import { BehaviorForm } from '@/components/behavior-form';
 import { BehaviorType } from '@/lib/types';
-
-function timestampToDateString(timestamp: number): string {
-	const d = new Date(timestamp);
-	const year = d.getFullYear();
-	const month = String(d.getMonth() + 1).padStart(2, '0');
-	const day = String(d.getDate()).padStart(2, '0');
-	return `${year}-${month}-${day}`;
-}
-
-function timestampToTimeString(timestamp: number): string {
-	const d = new Date(timestamp);
-	const hours = String(d.getHours()).padStart(2, '0');
-	const minutes = String(d.getMinutes()).padStart(2, '0');
-	return `${hours}:${minutes}`;
-}
 
 export default function EditBehaviorPage({
 	params,

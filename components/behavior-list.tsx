@@ -29,13 +29,13 @@ export function BehaviorList({ behaviors, studentId, onDelete }: BehaviorListPro
 					<div className="flex gap-2">
 						<Link
 							href={`/${studentId}/behavior/${behavior.id}/edit`}
-							className="cursor-pointer rounded px-3 py-1 text-sm text-blue-600 hover:bg-blue-100 hover:text-blue-800"
+							className="rounded px-3 py-1 text-sm text-blue-600 hover:bg-blue-100 hover:text-blue-800"
 						>
 							Edit
 						</Link>
 						<button
 							onClick={() => onDelete(behavior.id)}
-							className="cursor-pointer rounded px-3 py-1 text-sm text-red-600 hover:bg-red-100 hover:text-red-800"
+							className="rounded px-3 py-1 text-sm text-red-600 hover:bg-red-100 hover:text-red-800"
 						>
 							Delete
 						</button>
