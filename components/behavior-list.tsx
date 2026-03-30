@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Behavior } from '@/lib/types';
 import { formatBehaviorDate } from '@/lib/format-date';
+import { Pencil } from '@/components/icons/pencil';
+import { Trash } from '@/components/icons/trash';
 
 interface BehaviorListProps {
 	behaviors: Behavior[];
@@ -29,15 +31,17 @@ export function BehaviorList({ behaviors, studentId, onDelete }: BehaviorListPro
 					<div className="flex gap-2">
 						<Link
 							href={`/${studentId}/behavior/${behavior.id}/edit`}
-							className="rounded px-3 py-1 text-sm text-blue-600 hover:bg-blue-100 hover:text-blue-800"
+							aria-label={`Edit ${behavior.type} behavior`}
+							className="rounded p-2 text-blue-600 hover:bg-blue-100 hover:text-blue-800"
 						>
-							Edit
+							<Pencil className="h-5 w-5" />
 						</Link>
 						<button
 							onClick={() => onDelete(behavior.id)}
-							className="rounded px-3 py-1 text-sm text-red-600 hover:bg-red-100 hover:text-red-800"
+							aria-label={`Delete ${behavior.type} behavior`}
+							className="rounded p-2 text-red-600 hover:bg-red-100 hover:text-red-800"
 						>
-							Delete
+							<Trash className="h-5 w-5" />
 						</button>
 					</div>
 				</li>

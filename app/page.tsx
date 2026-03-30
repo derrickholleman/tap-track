@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useStudents } from '@/lib/use-students';
+import { useToast } from '@/components/toast';
 import { FilterBar } from '@/components/filter-bar';
 import { StudentList } from '@/components/student-list';
+import { DeleteModal } from '@/components/delete-modal';
 
 export default function Home() {
-	const { students, reorderStudents } = useStudents();
+	const { students, reorderStudents, deleteStudent } = useStudents();
+	const { showToast } = useToast();
 	const [filterQuery, setFilterQuery] = useState('');
+	const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
 	const filtered = students.filter((s) =>
 		`${s.firstName} ${s.lastName}`.toLowerCase().includes(filterQuery.toLowerCase())
@@ -27,7 +31,24 @@ export default function Home() {
 			</div>
 
 			<FilterBar value={filterQuery} onChange={setFilterQuery} />
-			<StudentList students={filtered} onReorder={reorderStudents} />
+			<StudentList
+				students={filtered}
+				onReorder={reorderStudents}
+				onDelete={(id, name) => setDeleteTarget({ id, name })}
+			/>
+
+			<DeleteModal
+				isOpen={deleteTarget !== null}
+				studentName={deleteTarget?.name ?? ''}
+				onConfirm={() => {
+					if (deleteTarget) {
+						deleteStudent(deleteTarget.id);
+						showToast('Student deleted successfully');
+					}
+					setDeleteTarget(null);
+				}}
+				onCancel={() => setDeleteTarget(null)}
+			/>
 		</main>
 	);
 }
