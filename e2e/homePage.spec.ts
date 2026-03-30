@@ -1,4 +1,15 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+
+const seedStudents = [
+	{ id: 'student-1', firstName: 'Alice', lastName: 'Johnson', behaviors: [] },
+	{ id: 'student-2', firstName: 'Marcus', lastName: 'Rivera', behaviors: [] },
+];
+
+async function seedLocalStorage(page: Page) {
+	await page.addInitScript((students) => {
+		localStorage.setItem('taptrack_students', JSON.stringify(students));
+	}, seedStudents);
+}
 
 test.describe('Home Page', () => {
 	test('shows app title and add student button', async ({ page }) => {
@@ -8,25 +19,36 @@ test.describe('Home Page', () => {
 		await expect(page.getByRole('link', { name: 'Add Student' })).toBeVisible();
 	});
 
-	test('can create a student and see them on the home page', async ({ page }) => {
-		await page.goto('/create');
-
-		await page.getByLabel('First Name').fill('John');
-		await page.getByLabel('Last Name').fill('Doe');
-		await page.getByRole('button', { name: 'Create' }).click();
-
-		await expect(page).toHaveURL('/');
-		await expect(page.getByText('John Doe')).toBeVisible();
-	});
-
-	test('can navigate to student profile', async ({ page }) => {
+	test('shows empty state when no students exist', async ({ page }) => {
 		await page.goto('/');
 
-		const studentLink = page.getByRole('link', { name: /John Doe/ });
-		if (await studentLink.isVisible()) {
-			await studentLink.click();
-			await expect(page.getByRole('heading', { name: 'John Doe' })).toBeVisible();
-			await expect(page.getByRole('link', { name: 'Add Behavior' })).toBeVisible();
-		}
+		await expect(page.getByText('No students found.')).toBeVisible();
+	});
+
+	test('displays seeded students', async ({ page }) => {
+		await seedLocalStorage(page);
+		await page.goto('/');
+
+		await expect(page.getByText('Alice Johnson')).toBeVisible();
+		await expect(page.getByText('Marcus Rivera')).toBeVisible();
+	});
+
+	test('filters students by name', async ({ page }) => {
+		await seedLocalStorage(page);
+		await page.goto('/');
+
+		await page.getByPlaceholder('Search students...').fill('alice');
+
+		await expect(page.getByText('Alice Johnson')).toBeVisible();
+		await expect(page.getByText('Marcus Rivera')).not.toBeVisible();
+	});
+
+	test('student name links to profile page', async ({ page }) => {
+		await seedLocalStorage(page);
+		await page.goto('/');
+
+		await page.getByRole('link', { name: 'Alice Johnson' }).click();
+
+		await expect(page.getByRole('heading', { name: 'Alice Johnson' })).toBeVisible();
 	});
 });
