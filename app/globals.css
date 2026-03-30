@@ -12,6 +12,12 @@
 	--font-mono: var(--font-geist-mono);
 }
 
+button,
+a,
+input[type='search']::-webkit-search-cancel-button {
+	cursor: pointer;
+}
+
 body {
 	background: var(--background);
 	color: var(--foreground);
