@@ -10,12 +10,12 @@ interface DeleteModalProps {
 }
 
 export function DeleteModal({ isOpen, studentName, onConfirm, onCancel }: DeleteModalProps) {
-	const cancelRef = useRef<HTMLButtonElement>(null);
+	const deleteRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		if (!isOpen) return;
 
-		cancelRef.current?.focus();
+		deleteRef.current?.focus();
 
 		function handleKeyDown(e: KeyboardEvent) {
 			if (e.key === 'Escape') onCancel();
@@ -48,13 +48,13 @@ export function DeleteModal({ isOpen, studentName, onConfirm, onCancel }: Delete
 				</p>
 				<div className="mt-6 flex justify-end gap-3">
 					<button
-						ref={cancelRef}
 						onClick={onCancel}
 						className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
 					>
 						Cancel
 					</button>
 					<button
+						ref={deleteRef}
 						onClick={onConfirm}
 						className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
 					>
