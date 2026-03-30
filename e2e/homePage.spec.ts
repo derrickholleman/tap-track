@@ -43,6 +43,20 @@ test.describe('Home Page', () => {
 		await expect(page.getByText('Marcus Rivera')).not.toBeVisible();
 	});
 
+	test('can delete a student from the home page', async ({ page }) => {
+		await seedLocalStorage(page);
+		await page.goto('/');
+
+		await page.getByRole('button', { name: 'Delete Alice Johnson' }).click();
+
+		await expect(page.getByRole('dialog')).toBeVisible();
+		await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
+
+		await expect(page.getByText('Student deleted successfully')).toBeVisible();
+		await expect(page.getByText('Alice Johnson')).not.toBeVisible();
+		await expect(page.getByText('Marcus Rivera')).toBeVisible();
+	});
+
 	test('student name links to profile page', async ({ page }) => {
 		await seedLocalStorage(page);
 		await page.goto('/');
