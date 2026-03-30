@@ -73,6 +73,7 @@ export function BehaviorForm({
 					type="date"
 					value={date}
 					onChange={(e) => setDate(e.target.value)}
+					onClick={(e) => e.currentTarget.showPicker()}
 					className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 					required
 				/>
@@ -87,6 +88,7 @@ export function BehaviorForm({
 					type="time"
 					value={time}
 					onChange={(e) => setTime(e.target.value)}
+					onClick={(e) => e.currentTarget.showPicker()}
 					className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 					required
 				/>
