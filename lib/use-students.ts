@@ -51,6 +51,15 @@ export function useStudents() {
 		refresh();
 	}
 
+	function importStudents(imported: Student[]) {
+		storage.importStudents(imported);
+		refresh();
+	}
+
+	function exportStudents(): string {
+		return storage.exportStudents();
+	}
+
 	return {
 		students,
 		addStudent,
@@ -60,5 +69,7 @@ export function useStudents() {
 		addBehavior,
 		updateBehavior,
 		deleteBehavior,
+		importStudents,
+		exportStudents,
 	};
 }

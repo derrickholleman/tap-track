@@ -88,3 +88,11 @@ export function deleteBehavior(studentId: string, behaviorId: string): void {
 	student.behaviors = student.behaviors.filter((b) => b.id !== behaviorId);
 	setStudents(students);
 }
+
+export function importStudents(imported: Student[]): void {
+	setStudents(imported);
+}
+
+export function exportStudents(): string {
+	return JSON.stringify(getStudents(), null, 2);
+}
