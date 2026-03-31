@@ -95,3 +95,25 @@ test.describe('Edit Behavior', () => {
 		await expect(page.getByText('Interrupting')).toBeVisible();
 	});
 });
+
+test.describe('Behavior Insights Chart', () => {
+	test('chart section is hidden with no behaviors and visible after adding one', async ({
+		page,
+	}) => {
+		const emptyStudent = [{ id: 'student-2', firstName: 'Bob', lastName: 'Smith', behaviors: [] }];
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, emptyStudent);
+		await page.goto('/student-2/profile');
+
+		await expect(page.getByText('Behavior Insights')).not.toBeVisible();
+
+		await page.getByRole('link', { name: 'Add Behavior' }).click();
+		await page.getByLabel('Behavior').selectOption('Off task');
+		await page.getByLabel('Time').fill('09:00');
+		await page.getByRole('button', { name: 'Apply' }).click();
+
+		await expect(page).toHaveURL('/student-2/profile');
+		await expect(page.getByText('Behavior Insights')).toBeVisible();
+	});
+});
