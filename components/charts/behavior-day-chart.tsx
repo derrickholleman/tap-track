@@ -47,11 +47,9 @@ export function BehaviorDayChart({ behaviors }: BehaviorDayChartProps) {
 		};
 	});
 
-	const activeDatasets = datasets.filter((ds) => ds.data.some((v) => v > 0));
-
 	const data = {
 		labels: DAYS,
-		datasets: activeDatasets,
+		datasets,
 	};
 
 	const options = {
