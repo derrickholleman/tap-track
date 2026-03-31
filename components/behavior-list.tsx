@@ -59,7 +59,7 @@ function MonthGroup({
 	const paginated = items.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
 	return (
-		<div className="w-80 rounded-lg border border-gray-200">
+		<div className="rounded-lg border border-gray-200">
 			<button
 				onClick={() => setOpen((o) => !o)}
 				className="flex w-full items-center justify-between px-4 py-3 text-left"
@@ -139,7 +139,7 @@ export function BehaviorList({ behaviors, studentId, onDelete }: BehaviorListPro
 	const groups = groupByMonth(behaviors);
 
 	return (
-		<div className="flex flex-wrap items-start gap-3 justify-center">
+		<div className="grid grid-cols-2 items-start gap-3">
 			{groups.map((group) => (
 				<MonthGroup
 					key={group.key}

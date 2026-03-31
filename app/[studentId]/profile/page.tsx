@@ -18,6 +18,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 	const { getStudent, deleteBehavior, deleteStudent } = useStudents();
 	const { showToast } = useToast();
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [chartFilter, setChartFilter] = useState('all');
 
 	const student = getStudent(studentId);
 
@@ -73,14 +74,53 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 
 			{student.behaviors.length > 0 && (
 				<section className="mx-auto mb-6 mt-20 max-w-2xl">
-					<h2 className="text-2xl font-semibold text-gray-900 mb-10">Behavior Insights</h2>
-					<BehaviorBarChart behaviors={student.behaviors} />
-					<div className="mt-10">
-						<BehaviorDayChart behaviors={student.behaviors} />
+					<div className="mb-10 flex items-center justify-between">
+						<h2 className="text-2xl font-semibold text-gray-900">Behavior Insights</h2>
+						<select
+							value={chartFilter}
+							onChange={(e) => setChartFilter(e.target.value)}
+							className="rounded-lg border border-gray-300 px-3 py-2 pr-8 text-sm"
+						>
+							<option value="all">All Time</option>
+							{Array.from(
+								new Map(
+									[...student.behaviors]
+										.sort((a, b) => b.timestamp - a.timestamp)
+										.map((b) => {
+											const d = new Date(b.timestamp);
+											const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+											const label = d.toLocaleString('default', { month: 'long', year: 'numeric' });
+											return [key, label] as [string, string];
+										})
+								).entries()
+							).map(([key, label]) => (
+								<option key={key} value={key}>
+									{label}
+								</option>
+							))}
+						</select>
 					</div>
-					<div className="mt-10">
-						<BehaviorTimeChart behaviors={student.behaviors} />
-					</div>
+					{(() => {
+						const filtered =
+							chartFilter === 'all'
+								? student.behaviors
+								: student.behaviors.filter((b) => {
+										const d = new Date(b.timestamp);
+										const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+										return key === chartFilter;
+									});
+						return (
+							<>
+								<BehaviorBarChart behaviors={filtered} />
+								<div className="mt-10">
+									<BehaviorDayChart behaviors={filtered} />
+								</div>
+								<div className="mt-10">
+									<BehaviorTimeChart behaviors={filtered} />
+								</div>
+							</>
+						);
+					})()}
 				</section>
 			)}
 
