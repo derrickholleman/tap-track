@@ -18,7 +18,7 @@ export function BehaviorList({ behaviors, studentId, onDelete }: BehaviorListPro
 	}
 
 	return (
-		<ul className="space-y-3">
+		<ul className="mx-auto max-w-sm space-y-3">
 			{sorted.map((behavior) => (
 				<li
 					key={behavior.id}

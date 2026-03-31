@@ -8,6 +8,7 @@ import { useToast } from '@/components/toast';
 import { PageHeader } from '@/components/page-header';
 import { BehaviorList } from '@/components/behavior-list';
 import { DeleteModal } from '@/components/delete-modal';
+import { BehaviorBarChart } from '@/components/charts/behavior-bar-chart';
 
 export default function StudentProfilePage({ params }: { params: Promise<{ studentId: string }> }) {
 	const { studentId } = use(params);
@@ -52,7 +53,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 			</div>
 
 			<section className="mx-auto mb-6 max-w-2xl">
-				<div className="mb-2 flex justify-center">
+				<div className="mb-6 flex justify-center">
 					<Link
 						href={`/${studentId}/behavior/add`}
 						className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
@@ -67,6 +68,13 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 					onDelete={(id) => deleteBehavior(studentId, id)}
 				/>
 			</section>
+
+			{student.behaviors.length > 0 && (
+				<section className="mx-auto mb-6 mt-20 max-w-2xl">
+					<h2 className="text-2xl font-semibold text-gray-900 mb-10">Behavior Insights</h2>
+					<BehaviorBarChart behaviors={student.behaviors} />
+				</section>
+			)}
 
 			<DeleteModal
 				isOpen={showDeleteModal}
