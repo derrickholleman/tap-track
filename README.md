@@ -1,6 +1,6 @@
 # TapTrack
 
-A student behavior tracking app for teachers. Add students, record behaviors with timestamps, and view behavior history on individual student profiles. Built with Next.js 16, React 19, Tailwind CSS, and localStorage persistence.
+A student behavior tracking app for teachers. Add students, record behaviors with timestamps, and visualize patterns with charts. Built with Next.js, React, TypeScript, Tailwind CSS, and Chart.js.
 
 ## Technologies
 
@@ -8,6 +8,7 @@ A student behavior tracking app for teachers. Add students, record behaviors wit
 - **[React](https://react.dev/)** - UI library
 - **[TypeScript](https://www.typescriptlang.org/)** - Type safety
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Chart.js](https://www.chartjs.org/)** + **[react-chartjs-2](https://react-chartjs-2.js.org/)** - Data visualization
 - **[Playwright](https://playwright.dev/)** - End-to-end testing
 - **[ESLint](https://eslint.org/)** + **[Prettier](https://prettier.io/)** - Code quality and formatting
 - **[Husky](https://typicode.github.io/husky/)** + **[lint-staged](https://github.com/lint-staged/lint-staged)** - Git hooks and pre-commit checks
@@ -15,13 +16,11 @@ A student behavior tracking app for teachers. Add students, record behaviors wit
 ## Features
 
 - Add, edit, and delete students
-- Record student behaviors (Refusing work, Off task, Not in assigned space, Interrupting)
-- Date and time tracking for each behavior
-- Filter students by name on the home page
-- Student profile pages with behavior history
-- Edit and delete individual behaviors
-- Delete student with confirmation modal
-- Success toast notifications
+- Record behaviors (Refusing work, Off task, Not in assigned space, Interrupting) with date/time
+- Behavior history grouped by month with collapsible sections and pagination
+- **Charts** — Behavior frequency, behaviors by day of week (stacked), and behaviors by time of day (line chart) with month filtering
+- **Import/Export** — Export all data as JSON; import on another device to pick up where you left off
+- Alphabetical student sorting and name search
 - Local storage persistence
 
 ## Getting Started
@@ -35,89 +34,25 @@ A student behavior tracking app for teachers. Add students, record behaviors wit
 
 ```bash
 npm install
-```
-
-### Development
-
-Start the development server:
-
-```bash
 npm run dev
 ```
 
 Navigate to `http://localhost:3000`.
 
-### Build
-
-Build the project for production:
-
-```bash
-npm run build
-```
-
 ## Testing
-
-Run end-to-end tests:
 
 ```bash
 npm test
 ```
 
-## Code Quality
-
-Format code:
-
-```bash
-npm run format
-```
-
-Lint code:
-
-```bash
-npm run lint
-```
-
 ## Project Structure
 
 ```
-app/
-├── page.tsx                              # Home page (student list + filter)
-├── layout.tsx                            # Root layout with ToastProvider
-├── globals.css                           # Global styles + Tailwind
-├── create/
-│   └── page.tsx                          # Create student form
-└── [studentId]/
-    ├── profile/
-    │   └── page.tsx                      # Student profile + behavior list
-    └── behavior/
-        ├── add/
-        │   └── page.tsx                  # Add behavior form
-        └── [behaviorId]/
-            └── edit/
-                └── page.tsx              # Edit behavior form
-
-components/
-├── behavior-form.tsx                     # Shared form for add/edit behavior
-├── behavior-list.tsx                     # Behavior list with edit/delete actions
-├── delete-modal.tsx                      # Delete confirmation modal
-├── filter-bar.tsx                        # Student search input
-├── page-header.tsx                       # Reusable page header with back link
-├── student-list.tsx                      # Student name link list
-├── toast.tsx                             # Toast notification provider
-└── icons/
-    └── arrow-left.tsx                    # Back arrow icon
-
-lib/
-├── types.ts                              # Student, Behavior, BehaviorType definitions
-├── storage.ts                            # localStorage CRUD service
-├── use-students.ts                       # React hook wrapping storage with state
-└── format-date.ts                        # Date formatting utilities
-
-e2e/                                      # Playwright e2e tests
-├── homePage.spec.ts
-├── createStudent.spec.ts
-├── studentProfile.spec.ts
-└── behavior.spec.ts
+app/              # Pages (home, create student, student profile, add/edit behavior)
+components/       # UI components (forms, lists, modals, toast, icons)
+components/charts # Chart.js chart components
+lib/              # Data layer (types, localStorage CRUD, hooks, utilities)
+e2e/              # Playwright end-to-end tests
 ```
 
 ## Pre-commit Hooks
