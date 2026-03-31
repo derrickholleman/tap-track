@@ -10,6 +10,7 @@ import { BehaviorList } from '@/components/behavior-list';
 import { DeleteModal } from '@/components/delete-modal';
 import { BehaviorBarChart } from '@/components/charts/behavior-bar-chart';
 import { BehaviorDayChart } from '@/components/charts/behavior-day-chart';
+import { BehaviorTimeChart } from '@/components/charts/behavior-time-chart';
 
 export default function StudentProfilePage({ params }: { params: Promise<{ studentId: string }> }) {
 	const { studentId } = use(params);
@@ -76,6 +77,9 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 					<BehaviorBarChart behaviors={student.behaviors} />
 					<div className="mt-10">
 						<BehaviorDayChart behaviors={student.behaviors} />
+					</div>
+					<div className="mt-10">
+						<BehaviorTimeChart behaviors={student.behaviors} />
 					</div>
 				</section>
 			)}
