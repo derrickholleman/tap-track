@@ -21,15 +21,9 @@ export default function Home() {
 	const [pendingImport, setPendingImport] = useState<Student[] | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
-	const filtered = [...students]
-		.sort((a, b) => {
-			const nameA = `${a.lastName} ${a.firstName}`.toLowerCase();
-			const nameB = `${b.lastName} ${b.firstName}`.toLowerCase();
-			return nameA.localeCompare(nameB);
-		})
-		.filter((s) =>
-			`${s.firstName} ${s.lastName}`.toLowerCase().includes(filterQuery.toLowerCase())
-		);
+	const filtered = students.filter((s) =>
+		`${s.firstName} ${s.lastName}`.toLowerCase().includes(filterQuery.toLowerCase())
+	);
 
 	function handleExport() {
 		const now = new Date();
