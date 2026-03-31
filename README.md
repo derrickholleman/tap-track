@@ -20,7 +20,8 @@ A student behavior tracking app for teachers. Add students, record behaviors wit
 - Behavior history grouped by month with collapsible sections and pagination
 - **Charts** — Behavior frequency, behaviors by day of week (stacked), and behaviors by time of day (line chart) with month filtering
 - **Import/Export** — Export all data as JSON; import on another device to pick up where you left off
-- Alphabetical student sorting and name search
+- **Drag and drop** — Reorder students manually
+- Name search
 - Local storage persistence
 
 ## Getting Started
