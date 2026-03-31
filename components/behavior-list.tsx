@@ -140,14 +140,14 @@ export function BehaviorList({ behaviors, studentId, onDelete }: BehaviorListPro
 
 	return (
 		<div className="flex flex-wrap items-start gap-3 justify-center">
-			{groups.map((group, index) => (
+			{groups.map((group) => (
 				<MonthGroup
 					key={group.key}
 					label={group.label}
 					items={group.items}
 					studentId={studentId}
 					onDelete={onDelete}
-					defaultOpen={index === 0}
+					defaultOpen={false}
 				/>
 			))}
 		</div>

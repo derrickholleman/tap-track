@@ -24,6 +24,12 @@ test.describe('Student Profile', () => {
 		await page.goto('/student-1/profile');
 
 		await expect(page.getByRole('heading', { name: 'Alice Johnson' })).toBeVisible();
+
+		// Expand month groups to see behaviors
+		const monthButtons = page.getByRole('button', { name: /2025/ });
+		for (const btn of await monthButtons.all()) {
+			await btn.click();
+		}
 		await expect(page.getByText('Off task')).toBeVisible();
 		await expect(page.getByText('Interrupting')).toBeVisible();
 	});
@@ -46,6 +52,8 @@ test.describe('Student Profile', () => {
 		await seedLocalStorage(page);
 		await page.goto('/student-1/profile');
 
+		// Expand the month group containing "Off task"
+		await page.getByRole('button', { name: /June 2025/ }).click();
 		await expect(page.getByText('Off task')).toBeVisible();
 
 		const offTaskItem = page.getByText('Off task').locator('..');

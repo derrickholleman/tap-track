@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/page-header';
 import { BehaviorList } from '@/components/behavior-list';
 import { DeleteModal } from '@/components/delete-modal';
 import { BehaviorBarChart } from '@/components/charts/behavior-bar-chart';
+import { BehaviorDayChart } from '@/components/charts/behavior-day-chart';
 
 export default function StudentProfilePage({ params }: { params: Promise<{ studentId: string }> }) {
 	const { studentId } = use(params);
@@ -73,6 +74,9 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 				<section className="mx-auto mb-6 mt-20 max-w-2xl">
 					<h2 className="text-2xl font-semibold text-gray-900 mb-10">Behavior Insights</h2>
 					<BehaviorBarChart behaviors={student.behaviors} />
+					<div className="mt-10">
+						<BehaviorDayChart behaviors={student.behaviors} />
+					</div>
 				</section>
 			)}
 

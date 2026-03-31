@@ -61,6 +61,12 @@ test.describe('Add Behavior', () => {
 		await page.getByRole('button', { name: 'Apply' }).click();
 
 		await expect(page).toHaveURL('/student-1/profile');
+		// Expand the month group for today's date to see the new behavior
+		const currentYear = new Date().getFullYear();
+		await page
+			.getByRole('button', { name: new RegExp(String(currentYear)) })
+			.first()
+			.click();
 		await expect(page.getByText('Refusing work')).toBeVisible();
 	});
 });
@@ -70,6 +76,8 @@ test.describe('Edit Behavior', () => {
 		await seedLocalStorage(page);
 		await page.goto('/student-1/profile');
 
+		// Expand the month group to reveal the edit link
+		await page.getByRole('button', { name: /2025/ }).first().click();
 		await page.getByRole('link', { name: 'Edit' }).click();
 
 		await expect(page).toHaveURL('/student-1/behavior/behavior-1/edit');
@@ -92,6 +100,8 @@ test.describe('Edit Behavior', () => {
 		await page.getByRole('button', { name: 'Apply' }).click();
 
 		await expect(page).toHaveURL('/student-1/profile');
+		// Expand the month group to see the updated behavior
+		await page.getByRole('button', { name: /2025/ }).first().click();
 		await expect(page.getByText('Interrupting')).toBeVisible();
 	});
 });
@@ -123,7 +133,7 @@ test.describe('Behavior List Grouping & Pagination', () => {
 		},
 	];
 
-	test('groups behaviors by month with most recent expanded', async ({ page }) => {
+	test('groups behaviors by month, all collapsed by default', async ({ page }) => {
 		await page.addInitScript((students) => {
 			localStorage.setItem('taptrack_students', JSON.stringify(students));
 		}, multiMonthStudent);
@@ -132,20 +142,26 @@ test.describe('Behavior List Grouping & Pagination', () => {
 		await expect(page.getByRole('button', { name: /March 2026/ })).toBeVisible();
 		await expect(page.getByRole('button', { name: /February 2026/ })).toBeVisible();
 		await expect(page.getByRole('button', { name: /January 2026/ })).toBeVisible();
+
+		// All groups collapsed — no behavior cards visible
+		await expect(page.getByText('Off task')).not.toBeVisible();
 	});
 
-	test('collapses and expands month groups', async ({ page }) => {
+	test('expands and collapses month groups', async ({ page }) => {
 		await page.addInitScript((students) => {
 			localStorage.setItem('taptrack_students', JSON.stringify(students));
 		}, multiMonthStudent);
 		await page.goto('/student-4/profile');
 
-		// Most recent month is open by default — its behavior card should be visible
 		const marchGroup = page.getByRole('button', { name: /March 2026/ });
-		await marchGroup.click();
 
-		// After collapsing, the February group's content should not be visible (it was closed by default)
+		// Expand — behavior card should appear
 		await marchGroup.click();
+		await expect(page.getByText('Off task')).toBeVisible();
+
+		// Collapse — behavior card should disappear
+		await marchGroup.click();
+		await expect(page.getByText('Off task')).not.toBeVisible();
 	});
 
 	test('shows pagination within a month when more than 5 behaviors', async ({ page }) => {
@@ -153,6 +169,9 @@ test.describe('Behavior List Grouping & Pagination', () => {
 			localStorage.setItem('taptrack_students', JSON.stringify(students));
 		}, paginatedStudent);
 		await page.goto('/student-3/profile');
+
+		// Expand the month group
+		await page.getByRole('button', { name: /2025/ }).first().click();
 
 		await expect(page.getByText('1 of 2')).toBeVisible();
 		await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
@@ -164,6 +183,9 @@ test.describe('Behavior List Grouping & Pagination', () => {
 			localStorage.setItem('taptrack_students', JSON.stringify(students));
 		}, paginatedStudent);
 		await page.goto('/student-3/profile');
+
+		// Expand the month group
+		await page.getByRole('button', { name: /2025/ }).first().click();
 
 		await page.getByRole('button', { name: 'Next' }).click();
 		await expect(page.getByText('2 of 2')).toBeVisible();
@@ -177,6 +199,9 @@ test.describe('Behavior List Grouping & Pagination', () => {
 	test('hides pagination controls with 5 or fewer behaviors in a month', async ({ page }) => {
 		await seedLocalStorage(page);
 		await page.goto('/student-1/profile');
+
+		// Expand the month group
+		await page.getByRole('button', { name: /2025/ }).first().click();
 
 		await expect(page.getByRole('button', { name: 'Previous' })).not.toBeVisible();
 		await expect(page.getByRole('button', { name: 'Next' })).not.toBeVisible();
