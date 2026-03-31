@@ -57,6 +57,21 @@ test.describe('Home Page', () => {
 		await expect(page.getByText('Marcus Rivera')).toBeVisible();
 	});
 
+	test('displays students sorted alphabetically by last name', async ({ page }) => {
+		const unsortedStudents = [
+			{ id: 's-1', firstName: 'Zara', lastName: 'Williams', behaviors: [] },
+			{ id: 's-2', firstName: 'Alice', lastName: 'Brown', behaviors: [] },
+			{ id: 's-3', firstName: 'Marcus', lastName: 'Rivera', behaviors: [] },
+		];
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, unsortedStudents);
+		await page.goto('/');
+
+		const names = await page.getByRole('link', { name: /Brown|Rivera|Williams/ }).allTextContents();
+		expect(names).toEqual(['Alice Brown', 'Marcus Rivera', 'Zara Williams']);
+	});
+
 	test('student name links to profile page', async ({ page }) => {
 		await seedLocalStorage(page);
 		await page.goto('/');
