@@ -96,6 +96,93 @@ test.describe('Edit Behavior', () => {
 	});
 });
 
+test.describe('Behavior List Grouping & Pagination', () => {
+	const paginatedStudent = [
+		{
+			id: 'student-3',
+			firstName: 'Carol',
+			lastName: 'Davis',
+			behaviors: Array.from({ length: 7 }, (_, i) => ({
+				id: `b-${i}`,
+				type: 'Off task',
+				timestamp: 1751000000000 + i * 100000,
+			})),
+		},
+	];
+
+	const multiMonthStudent = [
+		{
+			id: 'student-4',
+			firstName: 'Dan',
+			lastName: 'Evans',
+			behaviors: [
+				{ id: 'b-jan', type: 'Off task', timestamp: new Date('2026-01-15T10:00').getTime() },
+				{ id: 'b-feb', type: 'Off task', timestamp: new Date('2026-02-15T10:00').getTime() },
+				{ id: 'b-mar', type: 'Off task', timestamp: new Date('2026-03-15T10:00').getTime() },
+			],
+		},
+	];
+
+	test('groups behaviors by month with most recent expanded', async ({ page }) => {
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, multiMonthStudent);
+		await page.goto('/student-4/profile');
+
+		await expect(page.getByRole('button', { name: /March 2026/ })).toBeVisible();
+		await expect(page.getByRole('button', { name: /February 2026/ })).toBeVisible();
+		await expect(page.getByRole('button', { name: /January 2026/ })).toBeVisible();
+	});
+
+	test('collapses and expands month groups', async ({ page }) => {
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, multiMonthStudent);
+		await page.goto('/student-4/profile');
+
+		// Most recent month is open by default — its behavior card should be visible
+		const marchGroup = page.getByRole('button', { name: /March 2026/ });
+		await marchGroup.click();
+
+		// After collapsing, the February group's content should not be visible (it was closed by default)
+		await marchGroup.click();
+	});
+
+	test('shows pagination within a month when more than 5 behaviors', async ({ page }) => {
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, paginatedStudent);
+		await page.goto('/student-3/profile');
+
+		await expect(page.getByText('1 of 2')).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
+		await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+	});
+
+	test('navigates between pages within a month', async ({ page }) => {
+		await page.addInitScript((students) => {
+			localStorage.setItem('taptrack_students', JSON.stringify(students));
+		}, paginatedStudent);
+		await page.goto('/student-3/profile');
+
+		await page.getByRole('button', { name: 'Next' }).click();
+		await expect(page.getByText('2 of 2')).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+		await expect(page.getByRole('button', { name: 'Previous' })).toBeEnabled();
+
+		await page.getByRole('button', { name: 'Previous' }).click();
+		await expect(page.getByText('1 of 2')).toBeVisible();
+	});
+
+	test('hides pagination controls with 5 or fewer behaviors in a month', async ({ page }) => {
+		await seedLocalStorage(page);
+		await page.goto('/student-1/profile');
+
+		await expect(page.getByRole('button', { name: 'Previous' })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: 'Next' })).not.toBeVisible();
+	});
+});
+
 test.describe('Behavior Insights Chart', () => {
 	test('chart section is hidden with no behaviors and visible after adding one', async ({
 		page,
