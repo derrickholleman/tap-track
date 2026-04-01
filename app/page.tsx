@@ -57,9 +57,9 @@ export default function Home() {
 
 	return (
 		<main className="mx-auto w-full max-w-360 px-4 py-8">
-			<div className="relative mb-6 flex items-center">
+			<div className="relative mb-6 flex flex-wrap items-center justify-center gap-3">
 				<h1 className="w-full text-center text-4xl font-bold text-gray-900">Tap Track</h1>
-				<div className="absolute right-0 flex gap-2">
+				<div className="flex gap-2 md:absolute md:right-0">
 					<Link
 						href="/create"
 						className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"

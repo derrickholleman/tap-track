@@ -39,7 +39,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 
 	return (
 		<main className="mx-auto w-full max-w-360 px-4 py-8">
-			<div className="relative mb-6 flex items-center">
+			<div className="relative mb-6 flex flex-wrap items-center justify-center gap-3">
 				<div className="w-full text-center">
 					<PageHeader
 						title={`${student.firstName} ${student.lastName}`}
@@ -49,7 +49,7 @@ export default function StudentProfilePage({ params }: { params: Promise<{ stude
 				</div>
 				<button
 					onClick={() => setShowDeleteModal(true)}
-					className="absolute right-0 rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+					className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 lg:absolute lg:right-0"
 				>
 					Delete Student
 				</button>
